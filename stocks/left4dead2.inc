@@ -11,18 +11,30 @@
 #define	TEAM_INFECTED			3
 #define TEAM_SCRIPTEDAI			4 // Left 4 Dead 1 bots
 
+#define GHOSTFLAG_SPAWN_DISABLED	(1 << 0)
+#define GHOSTFLAG_WAIT_FOR_SAFE_AREA	(1 << 1)
+#define GHOSTFLAG_WAIT_FOR_FINALE	(1 << 2)
+#define GHOSTFLAG_WAIT_FOR_TANK		(1 << 3)
+#define GHOSTFLAG_SURVIVOR_ESCAPED	(1 << 4)
+#define GHOSTFLAG_DIRECTOR_TIMEOUT	(1 << 5)
+#define GHOSTFLAG_WAIT_FOR_STAMPEDE	(1 << 6)
+#define GHOSTFLAG_IN_SIGHT		(1 << 7)
+#define GHOSTFLAG_TOO_CLOSE		(1 << 8)
+#define GHOSTFLAG_RESTRICTED_AREA	(1 << 9)
+#define GHOSTFLAG_INSIDE_ENTITY		(1 << 10)
+
 enum ZombieClass
 {
-	Zombie_Invalid = 0,
+	Zombie_Common = 0,
 	Zombie_Smoker,
 	Zombie_Boomer,
 	Zombie_Hunter,
 	Zombie_Spitter,
 	Zombie_Jockey,
 	Zombie_Charger,
-	Zombie_Unknown1,
+	Zombie_Witch,
 	Zombie_Tank,
-	Zombie_Unknown2
+	Zombie_Survivor,
 };
 
 static int m_zombieClass = -2;
@@ -179,7 +191,7 @@ stock bool IsPlayerIT(int client)
 	
 	DeclareNetPropOf(client, m_itTimer);
 	
-	return GetEntDataFloat(player, m_itTimer + 8) != -1.0;
+	return GetEntDataFloat(client, m_itTimer + 8) != -1.0;
 }
 
 static int m_tongueOwner = -2;
@@ -341,4 +353,14 @@ stock bool IsPlayerStunned(int client)
 	DeclareNetPropOf(client, m_stunTimer);
 	
 	return GetEntDataFloat(client, m_stunTimer + 8) != -1;
+}
+
+static int m_ghostSpawnState = -2;
+stock int GetPlayerGhostSpawnState(int client)
+{
+	Assert(IsClient(client));
+	
+	DeclareNetPropOf(client, m_ghostSpawnState);
+	
+	return GetEntData(client, m_ghostSpawnState);
 }

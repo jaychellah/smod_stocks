@@ -7,11 +7,9 @@
 
 stock bool IsAdmin( int client )
 {
-	Assert( IsClientAndAuthorized( client ) );
+	Assert( IsClientAndConnected( client ) );
 	
-	AdminId admin = GetUserAdmin( client );
-	
-	return admin.HasFlag( Admin_Generic );
+	return GetUserFlagBits( client ) & ADMFLAG_GENERIC;
 }
 
 stock void PrintToAllAdminChat( const char[] message, any ... )
